@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		E80BA86918BE535300264449 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = E80BA86818BE535300264449 /* main.c */; };
 		E80BA86B18BE535300264449 /* Machine_Problem__1.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = E80BA86A18BE535300264449 /* Machine_Problem__1.1 */; };
+		E80BA87218BE538600264449 /* GameBoard.c in Sources */ = {isa = PBXBuildFile; fileRef = E80BA87118BE538600264449 /* GameBoard.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -28,6 +29,8 @@
 		E80BA86518BE535300264449 /* Machine Problem #1 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Machine Problem #1"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E80BA86818BE535300264449 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		E80BA86A18BE535300264449 /* Machine_Problem__1.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = Machine_Problem__1.1; sourceTree = "<group>"; };
+		E80BA87118BE538600264449 /* GameBoard.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = GameBoard.c; sourceTree = "<group>"; };
+		E80BA87318BE539600264449 /* GameBoard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameBoard.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +65,8 @@
 			children = (
 				E80BA86818BE535300264449 /* main.c */,
 				E80BA86A18BE535300264449 /* Machine_Problem__1.1 */,
+				E80BA87118BE538600264449 /* GameBoard.c */,
+				E80BA87318BE539600264449 /* GameBoard.h */,
 			);
 			path = "Machine Problem #1";
 			sourceTree = "<group>";
@@ -117,6 +122,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E80BA87218BE538600264449 /* GameBoard.c in Sources */,
 				E80BA86918BE535300264449 /* main.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

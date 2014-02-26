@@ -7,12 +7,11 @@
 //
 
 #include <stdio.h>
+#include "GameBoard.h"
 
 int main(int argc, const char * argv[])
 {
-
-    // insert code here...
-    printf("Hello, World!\n");
+    CreateRandomBoard(PuzzleBoard);
     return 0;
 }
 

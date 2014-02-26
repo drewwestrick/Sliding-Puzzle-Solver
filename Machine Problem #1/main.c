@@ -11,7 +11,12 @@
 
 int main(int argc, const char * argv[])
 {
-    CreateRandomBoard(PuzzleBoard);
+    CreateRandomBoard(&SlidingBoard);
+    PrintGameBoard(&SlidingBoard);
+    PrintBoardDistance(&SlidingBoard);
+    
+    CreateGoalBoard(&SlidingBoard);
+    PrintGameBoard(&SlidingBoard);
     return 0;
 }
 

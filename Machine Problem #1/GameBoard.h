@@ -9,6 +9,9 @@
 #ifndef Machine_Problem__1_GameBoard_h
 #define Machine_Problem__1_GameBoard_h
 
+#define COL 3
+#define ROW 3
+
 typedef struct {
     int Value;
     int Xposition;
@@ -16,10 +19,18 @@ typedef struct {
     int GoalDistance;
 } Tile;
 
-int COL = 3;
-int ROW = 3;
-Tile PuzzleBoard[9];
+typedef struct {
+    Tile Tiles[9];
+    int Inversions;
+    int TotalDistance;
+} Board;
 
-void CreateRandomBoard(Tile *PuzzleBoard);
+Board SlidingBoard;
+
+void CreateRandomBoard(Board *SlidingBoard);
+void PrintGameBoard(Board *SlidingBoard);
+void CreateGoalBoard(Board *SlidingBoard);
+void PrintBoardDistance(Board *SlidingBoard);
+
 
 #endif

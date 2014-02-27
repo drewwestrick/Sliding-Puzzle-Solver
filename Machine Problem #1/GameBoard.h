@@ -19,18 +19,28 @@ typedef struct {
     int GoalDistance;
 } Tile;
 
-typedef struct {
+typedef struct Board{
     Tile Tiles[9];
     int Inversions;
     int TotalDistance;
+    int TotalMoves;
+    int isSolvable;
+    int SpacePosition;
+    struct Board *PrevState;
+    struct Board *NextState;
 } Board;
 
+Board NextSlidingBoard;
 Board SlidingBoard;
+Board PrevSlidingBoard;
 
 void CreateRandomBoard(Board *SlidingBoard);
 void PrintGameBoard(Board *SlidingBoard);
 void CreateGoalBoard(Board *SlidingBoard);
 void PrintBoardDistance(Board *SlidingBoard);
+void CalculateInversions(Board *SlidingBoard);
+void GotoNextState(Board *SlidingBoard);
+void CalculateDistance(Tile *Tiles, int Row, int Col, int Value);
 
 
 #endif

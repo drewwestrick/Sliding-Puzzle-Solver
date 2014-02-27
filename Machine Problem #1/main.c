@@ -12,11 +12,13 @@
 int main(int argc, const char * argv[])
 {
     CreateRandomBoard(&SlidingBoard);
+    CalculateInversions(&SlidingBoard);
+    if (SlidingBoard.isSolvable) {
+        PrintGameBoard(&SlidingBoard);
+        GotoNextState(&SlidingBoard);
+    }
     PrintGameBoard(&SlidingBoard);
     PrintBoardDistance(&SlidingBoard);
-    
-    CreateGoalBoard(&SlidingBoard);
-    PrintGameBoard(&SlidingBoard);
     return 0;
 }
 

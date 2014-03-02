@@ -13,6 +13,14 @@
 #include <math.h>
 #include <string.h>
 
+List OpenSet;
+List ClosedSet;
+Board NextSlidingBoard;
+Board PrevSlidingBoard;
+List *ClosedSetTail;
+int OpenSetCount;
+int ClosedSetCount;
+
 /* Create a random puzzle */
 void CreateRandomBoard(Board *SlidingBoard, int Seed) {
     Tile *Tiles = SlidingBoard->Tiles;
@@ -22,10 +30,11 @@ void CreateRandomBoard(Board *SlidingBoard, int Seed) {
     int i,j;
     int Row = 0;
     int Col = 0;
+    /* Initialize the values on the board */
     for (i=0;i<9;i++) {
         Tiles[i].Value = -1;
     }
-    //srand((unsigned int)time(0));
+    /* Seed the random function with the passed seed integer */
     srand(Seed);
     for (Row=0;Row<3;Row++) {
         for (Col=0;Col<3;Col++) {
@@ -48,44 +57,6 @@ void CreateRandomBoard(Board *SlidingBoard, int Seed) {
     CalculateDistance(SlidingBoard);
 }
 
-/* Display the puzzle board */
-void PrintGameBoard(Board *SlidingBoard) {
-    Tile *Tiles = SlidingBoard->Tiles;
-    printf("\n%d %d %d\n%d %d %d\n%d %d %d\n\n",Tiles[0].Value,Tiles[1].Value,Tiles[2].Value,Tiles[3].Value,Tiles[4].Value,Tiles[5].Value,Tiles[6].Value,Tiles[7].Value,Tiles[8].Value);
-}
-
-/* Display the distance of each tile from the goal position */
-void PrintBoardDistance(Board *SlidingBoardLocal) {
-    Tile *Tiles = SlidingBoardLocal->Tiles;
-    printf("\n%d %d %d\n%d %d %d\n%d %d %d\n\n",Tiles[0].GoalDistance,Tiles[1].GoalDistance,Tiles[2].GoalDistance,Tiles[3].GoalDistance,Tiles[4].GoalDistance,Tiles[5].GoalDistance,Tiles[6].GoalDistance,Tiles[7].GoalDistance,Tiles[8].GoalDistance);
-    printf("Total Distance: %d\n", SlidingBoardLocal->TotalDistance);
-    printf("Total Inversions: %d\n", SlidingBoardLocal->Inversions);
-    printf("Solveable?: %d\n\n", SlidingBoardLocal->isSolvable);
-}
-
-/* Create a goal board for reference */
-void CreateGoalBoard(Board *SlidingBoard) {
-    Tile *Tiles = SlidingBoard->Tiles;
-    int Row=0;
-    int Col=0;
-    int rnum;
-    for (Row=0;Row<3;Row++) {
-        for (Col=0;Col<3;Col++) {
-            rnum = Row*3+Col+1;
-            if (rnum<9) {
-                Tiles[Row*3+Col].Value = rnum;
-            }
-            else {
-                Tiles[Row*3+Col].Value = 0;
-            }
-            Tiles[Row*3+Col].Xposition = Col;
-            Tiles[Row*3+Col].Yposition = Row;
-            /* Calculate the distance to goal state */
-            CalculateDistance(SlidingBoard);
-        }
-    }
-}
-
 /* Calculate the next state of the board and select optimal state */
 Board AStarSearch(Board *SlidingBoard) {
     OpenSetCount = 0;
@@ -97,16 +68,14 @@ Board AStarSearch(Board *SlidingBoard) {
     }
     CalculateDistance(SlidingBoard);
     while (OpenSetCount>0) {
-        Lowest = FindLowest(&OpenSet, OpenSetCount);
-        if (Lowest.This.TotalDistance==0) {
-            printf("Moves: %d\n", Lowest.This.TotalMoves);
+        Lowest = OpenSet;
+        if (OpenSet.This.TotalDistance==0) {
+            printf("Moves: %d\n", OpenSet.This.TotalMoves);
             printf("Found Goal!\n");
-            PrintGameBoard(&Lowest.This);
-            PrintBoardProgession(&Lowest.This);
-            printf("Step: %d\n", Lowest.This.TotalMoves);
-            PrintGameBoard(&Lowest.This);
-            FreeList(&OpenSet);
-            FreeList(&ClosedSet);
+            PrintGameBoard(&OpenSet.This);
+            PrintBoardProgession(&OpenSet.This);
+            printf("Step: %d\n", OpenSet.This.TotalMoves);
+            PrintGameBoard(&OpenSet.This);
             OpenSet.Next = NULL;
             OpenSet.Prev = NULL;
             ClosedSet.Next = NULL;
@@ -119,17 +88,9 @@ Board AStarSearch(Board *SlidingBoard) {
         else {
             OpenSetCount--;
             if (OpenSetCount>0) {
-                if (!(Lowest.Prev)) {
-                    OpenSet = *Lowest.Next;
-                    OpenSet.Prev = NULL;
-                    AddToClosed(&Lowest);
-                }
-                else if (!(Lowest.Next)) {
-                    Lowest.Prev->Next = NULL;
-                }
-                else {
-                    Lowest.Prev->Next = Lowest.Next;
-                }
+                OpenSet = *Lowest.Next;
+                OpenSet.Prev = NULL;
+                AddToClosed(&Lowest);
             }
         }
         ExploreNeighbors(&Lowest.This);
@@ -137,7 +98,7 @@ Board AStarSearch(Board *SlidingBoard) {
     return Lowest.This;
 }
 
-/* Calculate the number of inversion to see if the puzzle is solveable */
+/* Calculate the number of inversion to see if the puzzle is solvable */
 int CalculateInversions(Board *SlidingBoard) {
     Tile *Tiles = SlidingBoard->Tiles;
     int i;
@@ -163,7 +124,8 @@ int CalculateInversions(Board *SlidingBoard) {
     }
 }
 
-/* Calculate heuristic variable distance */
+/* Calculate heuristic variable */
+/* I've decided to used the distance heuristics as it provides a more optimal solution */
 void CalculateDistance(Board *SlidingBoardNew) {
     SlidingBoardNew->TotalDistance = 0;
     Tile *Tiles = SlidingBoardNew->Tiles;
@@ -178,10 +140,9 @@ void CalculateDistance(Board *SlidingBoardNew) {
         }
         SlidingBoardNew->TotalDistance += Tiles[i].GoalDistance;
     }
-    //printf("Total Distance: %d\n", SlidingBoardNew->TotalDistance);
 }
 
-/* Shift Puzzle Board to new position, update x,y values */
+/* Shift puzzle board to given position, update x,y values */
 void ShiftPuzzle(Board *SlidingBoardOld, Board *SlidingBoardNew, int Amount) {
     Tile *TilesNew;
     Tile temp;
@@ -204,6 +165,7 @@ void ShiftPuzzle(Board *SlidingBoardOld, Board *SlidingBoardNew, int Amount) {
     memcpy(SlidingBoardNew->PrevBoard, SlidingBoardOld, sizeof(*SlidingBoardOld));
 }
 
+/* Check to see if two given puzzle boards are the same */
 int CheckDifference(Board *SlidingBoardNew, Board *SlidingBoardOld) {
     int i;
     for(i=0;i<9;i++) {
@@ -214,15 +176,18 @@ int CheckDifference(Board *SlidingBoardNew, Board *SlidingBoardOld) {
     return 1;
 }
 
+/* Check the closed list to see if given puzzle board is present */
 int CheckClosedList(Board *SlidingBoardNew) {
     int i;
     List *TempList = &ClosedSet;
     for (i=0;i<ClosedSetCount;i++) {
         if (CheckDifference(&TempList->This, SlidingBoardNew)) {
+            /* Return False */
             return 0;
         }
         TempList = TempList->Next;
     }
+    /* Return True */
     return 1;
 }
 
@@ -231,13 +196,17 @@ int CheckOpenList(Board *SlidingBoardNew) {
     List *TempList = &OpenSet;
     for (i=0;i<OpenSetCount;i++) {
         if (CheckDifference(&TempList->This, SlidingBoardNew)) {
+            /* Return False */
             return 0;
         }
         TempList = TempList->Next;
     }
+    /* Return True */
     return 1;
 }
 
+/* Determine possible positions for the space piece to move
+   Then execute a puzzle move for all possible neighbors */
 void ExploreNeighbors(Board *SlidingBoard) {
     Tile *Tiles = SlidingBoard->Tiles;
     Board SlidingBoardRight;
@@ -245,11 +214,13 @@ void ExploreNeighbors(Board *SlidingBoard) {
     Board SlidingBoardTop;
     Board SlidingBoardBtm;
     switch (Tiles[SlidingBoard->SpacePosition].Xposition) {
+        /* Space is in right column */
         case 0:
             ShiftPuzzle(SlidingBoard, &SlidingBoardRight, 1);
             CalculateDistance(&SlidingBoardRight);
             AddToOpen(&SlidingBoardRight);
             break;
+        /* Space is in center column */
         case 1:
             ShiftPuzzle(SlidingBoard, &SlidingBoardRight, 1);
             CalculateDistance(&SlidingBoardRight);
@@ -258,6 +229,7 @@ void ExploreNeighbors(Board *SlidingBoard) {
             CalculateDistance(&SlidingBoardLeft);
             AddToOpen(&SlidingBoardLeft);
             break;
+        /* Space is in left column */
         case 2:
             ShiftPuzzle(SlidingBoard, &SlidingBoardLeft, -1);
             CalculateDistance(&SlidingBoardLeft);
@@ -265,11 +237,13 @@ void ExploreNeighbors(Board *SlidingBoard) {
             break;
     }
     switch (Tiles[SlidingBoard->SpacePosition].Yposition) {
+        /* Space is in top row */
         case 0:
             ShiftPuzzle(SlidingBoard, &SlidingBoardTop, 3);
             CalculateDistance(&SlidingBoardTop);
             AddToOpen(&SlidingBoardTop);
             break;
+        /* Space is in middle row */
         case 1:
             ShiftPuzzle(SlidingBoard, &SlidingBoardTop, 3);
             CalculateDistance(&SlidingBoardTop);
@@ -278,6 +252,7 @@ void ExploreNeighbors(Board *SlidingBoard) {
             CalculateDistance(&SlidingBoardBtm);
             AddToOpen(&SlidingBoardBtm);
             break;
+        /* Space is in bottom row */
         case 2:
             ShiftPuzzle(SlidingBoard, &SlidingBoardBtm, -3);
             CalculateDistance(&SlidingBoardBtm);
@@ -287,23 +262,7 @@ void ExploreNeighbors(Board *SlidingBoard) {
 
 }
 
-List FindLowest(List *Set, int ListNum) {
-    int Min = 10000;
-    List *temp;
-    while (ListNum>0) {
-        if (Set->This.TotalDistance<Min) {
-            Min = Set->This.TotalDistance;
-            temp = Set;
-            Set = Set = Set->Next;
-        }
-        else {
-            Set = Set->Next;
-        }
-        ListNum--;
-    }
-    return *temp;
-}
-
+/* Add given puzzle board to open set */
 void AddToOpen(Board *SlidingBoard) {
     int tmpcnt = OpenSetCount;
     List *OpenSetTemp = &OpenSet;
@@ -339,6 +298,8 @@ void AddToOpen(Board *SlidingBoard) {
         }
     }
 }
+
+/* Add given puzzle baord to closed set */
 void AddToClosed(List *NewList) {
     if (!(ClosedSetTail)) {
         ClosedSetTail = &ClosedSet;
@@ -357,6 +318,7 @@ void AddToClosed(List *NewList) {
     }
 }
 
+/* Recurviely print the puzzle board move progression */
 int PrintBoardProgession(Board *SlidingBoard) {
     if (SlidingBoard->PrevBoard) {
         SlidingBoard = SlidingBoard->PrevBoard;
@@ -370,14 +332,26 @@ int PrintBoardProgession(Board *SlidingBoard) {
     return 0;
 }
 
-int FreeList(List *NewList) {
-    if (NewList->Next) {
+/* Display the puzzle board on the console */
+void PrintGameBoard(Board *SlidingBoard) {
+    Tile *Tiles = SlidingBoard->Tiles;
+    printf("\n%d %d %d\n%d %d %d\n%d %d %d\n\n",Tiles[0].Value,Tiles[1].Value,Tiles[2].Value,Tiles[3].Value,Tiles[4].Value,Tiles[5].Value,Tiles[6].Value,Tiles[7].Value,Tiles[8].Value);
+}
+
+/* Display the distance of each tile from the goal position */
+void PrintBoardDistance(Board *SlidingBoardLocal) {
+    Tile *Tiles = SlidingBoardLocal->Tiles;
+    printf("\n%d %d %d\n%d %d %d\n%d %d %d\n\n",Tiles[0].GoalDistance,Tiles[1].GoalDistance,Tiles[2].GoalDistance,Tiles[3].GoalDistance,Tiles[4].GoalDistance,Tiles[5].GoalDistance,Tiles[6].GoalDistance,Tiles[7].GoalDistance,Tiles[8].GoalDistance);
+    printf("Total Distance: %d\n", SlidingBoardLocal->TotalDistance);
+    printf("Total Inversions: %d\n", SlidingBoardLocal->Inversions);
+    printf("Solveable?: %d\n\n", SlidingBoardLocal->isSolvable);
+}
+
+void FreeList(List *NewList) {
+    List *temp;
+    while (NewList!=NULL) {
+        temp = NewList;
         NewList = NewList->Next;
-        FreeList(NewList);
-        free(NewList);
-        return 0;
-    }
-    else {
-        return 0;
+        free(temp);
     }
 }

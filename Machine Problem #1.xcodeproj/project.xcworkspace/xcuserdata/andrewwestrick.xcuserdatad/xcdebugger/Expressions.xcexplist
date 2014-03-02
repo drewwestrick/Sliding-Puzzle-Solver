@@ -49,6 +49,9 @@
                value = "ClosedSet">
             </PersistentString>
             <PersistentString
+               value = "ClosedSetTail">
+            </PersistentString>
+            <PersistentString
                value = "OpenSet">
             </PersistentString>
             <PersistentString

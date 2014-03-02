@@ -36,19 +36,8 @@ typedef struct List{
     struct List *Next;
 } List;
 
-Board NextSlidingBoard;
-Board PrevSlidingBoard;
-
-List OpenSet;
-List ClosedSet;
-List *ClosedSetTail;
-
-int OpenSetCount;
-int ClosedSetCount;
-
 void CreateRandomBoard(Board *SlidingBoard, int Seed);
 void PrintGameBoard(Board *SlidingBoard);
-void CreateGoalBoard(Board *SlidingBoard);
 void PrintBoardDistance(Board *SlidingBoard);
 int CalculateInversions(Board *SlidingBoard);
 Board AStarSearch(Board *SlidingBoard);
@@ -57,11 +46,9 @@ void ShiftPuzzle(Board *SlidingBoardOld, Board *SlidingBoardNew, int Amount);
 void CheckMinDistance(Board *NextState, Board *SlidingBoardNew, int *MinDistance);
 int CheckDifference(Board *SlidingBoardNew, Board *SlidingBoardOld);
 void AddToOpen(Board *SlidingBoard);
-List FindLowest(List *Set, int ListNum);
 void ExploreNeighbors(Board *SlidingBoard);
 void AddToClosed(List *NewList);
 int CheckOpenList(Board *SlidingBoardNew);
 int CheckClosedList(Board *SlidingBoardNew);
 int PrintBoardProgession(Board *SlidingBoard);
-int FreeList(List *NewList);
 #endif

@@ -11,14 +11,27 @@
 
 int main(int argc, const char * argv[])
 {
-    CreateRandomBoard(&SlidingBoard);
-    CalculateInversions(&SlidingBoard);
-    if (SlidingBoard.isSolvable) {
-        PrintGameBoard(&SlidingBoard);
-        GotoNextState(&SlidingBoard);
+    Board SlidingBoard_1;
+    CreateRandomBoard(&SlidingBoard_1, 10);
+    if (CalculateInversions(&SlidingBoard_1)) {
+        printf("\nGame Board:\n");
+        PrintGameBoard(&SlidingBoard_1);
+        AStarSearch(&SlidingBoard_1);
     }
-    PrintGameBoard(&SlidingBoard);
-    PrintBoardDistance(&SlidingBoard);
+    Board SlidingBoard_2;
+    CreateRandomBoard(&SlidingBoard_2, 11);
+    if (CalculateInversions(&SlidingBoard_2)) {
+        printf("\nGame Board:\n");
+        PrintGameBoard(&SlidingBoard_2);
+        AStarSearch(&SlidingBoard_2);
+    }
+    Board SlidingBoard_3;
+    CreateRandomBoard(&SlidingBoard_3, 12);
+    if (CalculateInversions(&SlidingBoard_3)) {
+        printf("\nGame Board:\n");
+        PrintGameBoard(&SlidingBoard_3);
+        AStarSearch(&SlidingBoard_3);
+    }
     return 0;
 }
 

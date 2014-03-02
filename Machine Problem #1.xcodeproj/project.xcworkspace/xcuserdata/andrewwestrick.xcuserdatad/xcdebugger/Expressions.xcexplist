@@ -3,6 +3,9 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "FindLowest:GameBoard.c">
+      </ContextState>
+      <ContextState
          contextName = "CreateRandomBoard:GameBoard.c">
          <PersistentStrings>
             <PersistentString
@@ -17,9 +20,6 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "main:main.c">
-      </ContextState>
-      <ContextState
          contextName = "GotoNextState:GameBoard.c">
          <PersistentStrings>
             <PersistentString
@@ -30,6 +30,70 @@
             </PersistentString>
             <PersistentString
                value = "TilesRight">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "main:main.c">
+      </ContextState>
+      <ContextState
+         contextName = "AStarSearch:GameBoard.c">
+         <PersistentStrings>
+            <PersistentString
+               value = "Lowest.This.TotalDistance">
+            </PersistentString>
+            <PersistentString
+               value = "ClosedSetCount">
+            </PersistentString>
+            <PersistentString
+               value = "ClosedSet">
+            </PersistentString>
+            <PersistentString
+               value = "OpenSet">
+            </PersistentString>
+            <PersistentString
+               value = "OpenSetCount">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "CalculateDistance:GameBoard.c">
+         <PersistentStrings>
+            <PersistentString
+               value = "(((Tile-&gt;Value-1)%3)-(Tile-&gt;Xposition))">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "CheckClosedList:GameBoard.c">
+         <PersistentStrings>
+            <PersistentString
+               value = "OpenSet">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "AddToOpen:GameBoard.c">
+         <PersistentStrings>
+            <PersistentString
+               value = "ClosedSetCount">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "CalculateTileDistance:GameBoard.c">
+      </ContextState>
+      <ContextState
+         contextName = "AddToClosed:GameBoard.c">
+      </ContextState>
+      <ContextState
+         contextName = "ShiftPuzzle:GameBoard.c">
+      </ContextState>
+      <ContextState
+         contextName = "ExploreNeighbors:GameBoard.c">
+         <PersistentStrings>
+            <PersistentString
+               value = "OpenSet">
             </PersistentString>
          </PersistentStrings>
       </ContextState>

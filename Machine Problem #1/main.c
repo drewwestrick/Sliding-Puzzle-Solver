@@ -11,26 +11,24 @@
 
 int main(int argc, const char * argv[])
 {
-    Board SlidingBoard_1;
-    CreateRandomBoard(&SlidingBoard_1, 10);
-    if (CalculateInversions(&SlidingBoard_1)) {
+    Board SlidingBoard;
+    CreateRandomBoard(&SlidingBoard, 10);
+    if (CalculateInversions(&SlidingBoard)) {
         printf("\nGame Board:\n");
-        PrintGameBoard(&SlidingBoard_1);
-        AStarSearch(&SlidingBoard_1);
+        PrintGameBoard(&SlidingBoard);
+        AStarSearch(&SlidingBoard);
     }
-    Board SlidingBoard_2;
-    CreateRandomBoard(&SlidingBoard_2, 10);
-    if (CalculateInversions(&SlidingBoard_2)) {
+    CreateRandomBoard(&SlidingBoard, 10);
+    if (CalculateInversions(&SlidingBoard)) {
         printf("\nGame Board:\n");
-        PrintGameBoard(&SlidingBoard_2);
-        AStarSearch(&SlidingBoard_2);
+        PrintGameBoard(&SlidingBoard);
+        AStarSearch(&SlidingBoard);
     }
-    Board SlidingBoard_3;
-    CreateRandomBoard(&SlidingBoard_3, 12);
-    if (CalculateInversions(&SlidingBoard_3)) {
+    CreateRandomBoard(&SlidingBoard, 12);
+    if (CalculateInversions(&SlidingBoard)) {
         printf("\nGame Board:\n");
-        PrintGameBoard(&SlidingBoard_3);
-        AStarSearch(&SlidingBoard_3);
+        PrintGameBoard(&SlidingBoard);
+        AStarSearch(&SlidingBoard);
     }
     return 0;
 }

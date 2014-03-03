@@ -23,6 +23,7 @@ int ClosedSetCount;
 
 /* Create a random puzzle */
 void CreateRandomBoard(Board *SlidingBoard, int Seed) {
+    memset(SlidingBoard, 0, sizeof(Board));
     Tile *Tiles = SlidingBoard->Tiles;
     SlidingBoard->TotalDistance = 0;
     SlidingBoard->Inversions = 0;
@@ -74,8 +75,12 @@ Board AStarSearch(Board *SlidingBoard) {
             printf("Found Goal!\n");
             PrintGameBoard(&OpenSet.This);
             PrintBoardProgession(&OpenSet.This);
-            FreeList(&OpenSet, 1);
-            FreeList(&ClosedSet, 1);
+            OpenSet.This.PrevBoard = NULL;
+            ClosedSet.This.PrevBoard = NULL;
+            OpenSet.Next = NULL;
+            OpenSet.Prev = NULL;
+            ClosedSet.Next = NULL;
+            ClosedSet.Prev = NULL;
             ClosedSetTail = NULL;
             OpenSetCount = 0;
             ClosedSetCount = 0;
@@ -339,17 +344,4 @@ void PrintBoardDistance(Board *SlidingBoardLocal) {
     printf("Total Distance: %d\n", SlidingBoardLocal->TotalDistance);
     printf("Total Inversions: %d\n", SlidingBoardLocal->Inversions);
     printf("Solveable?: %d\n\n", SlidingBoardLocal->isSolvable);
-}
-
-int FreeList(List *NewList, int Flip) {
-    if (NewList->Next) {
-        if (Flip) {
-            free(NewList->Prev);
-        }
-        FreeList(NewList->Next, !Flip);
-        return 0;
-    }
-    else {
-        return 0;
-    }
 }

@@ -74,12 +74,8 @@ Board AStarSearch(Board *SlidingBoard) {
             printf("Found Goal!\n");
             PrintGameBoard(&OpenSet.This);
             PrintBoardProgession(&OpenSet.This);
-            memset(&OpenSet.This, 0, sizeof(Board));
-            memset(&ClosedSet.This, 0, sizeof(Board));
-            OpenSet.Next = NULL;
-            OpenSet.Prev = NULL;
-            ClosedSet.Next = NULL;
-            ClosedSet.Prev = NULL;
+            FreeList(&OpenSet, 1);
+            FreeList(&ClosedSet, 1);
             ClosedSetTail = NULL;
             OpenSetCount = 0;
             ClosedSetCount = 0;
@@ -345,11 +341,15 @@ void PrintBoardDistance(Board *SlidingBoardLocal) {
     printf("Solveable?: %d\n\n", SlidingBoardLocal->isSolvable);
 }
 
-void FreeList(List *NewList) {
-    List *temp;
-    while (NewList!=NULL) {
-        temp = NewList;
-        NewList = NewList->Next;
-        free(temp);
+int FreeList(List *NewList, int Flip) {
+    if (NewList->Next) {
+        if (Flip) {
+            free(NewList->Prev);
+        }
+        FreeList(NewList->Next, !Flip);
+        return 0;
+    }
+    else {
+        return 0;
     }
 }

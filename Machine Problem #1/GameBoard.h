@@ -51,4 +51,5 @@ void AddToClosed(List *NewList);
 int CheckOpenList(Board *SlidingBoardNew);
 int CheckClosedList(Board *SlidingBoardNew);
 int PrintBoardProgession(Board *SlidingBoard);
+int FreeList(List *NewList, int Flip);
 #endif

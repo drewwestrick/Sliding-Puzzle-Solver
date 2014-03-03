@@ -12,13 +12,13 @@
 int main(int argc, const char * argv[])
 {
     Board SlidingBoard;
-    CreateRandomBoard(&SlidingBoard, 10);
+    CreateRandomBoard(&SlidingBoard, 15);
     if (CalculateInversions(&SlidingBoard)) {
         printf("\nGame Board:\n");
         PrintGameBoard(&SlidingBoard);
         AStarSearch(&SlidingBoard);
     }
-    CreateRandomBoard(&SlidingBoard, 10);
+    CreateRandomBoard(&SlidingBoard, 21);
     if (CalculateInversions(&SlidingBoard)) {
         printf("\nGame Board:\n");
         PrintGameBoard(&SlidingBoard);

@@ -74,8 +74,8 @@ Board AStarSearch(Board *SlidingBoard) {
             printf("Found Goal!\n");
             PrintGameBoard(&OpenSet.This);
             PrintBoardProgession(&OpenSet.This);
-            printf("Step: %d\n", OpenSet.This.TotalMoves);
-            PrintGameBoard(&OpenSet.This);
+            memset(&OpenSet.This, 0, sizeof(Board));
+            memset(&ClosedSet.This, 0, sizeof(Board));
             OpenSet.Next = NULL;
             OpenSet.Prev = NULL;
             ClosedSet.Next = NULL;
@@ -320,14 +320,12 @@ void AddToClosed(List *NewList) {
 
 /* Recurviely print the puzzle board move progression */
 int PrintBoardProgession(Board *SlidingBoard) {
-    if (SlidingBoard->PrevBoard) {
+    Board *temp;
+    while(SlidingBoard->PrevBoard) {
+        temp = SlidingBoard->PrevBoard;
         SlidingBoard = SlidingBoard->PrevBoard;
-        PrintBoardProgession(SlidingBoard);
-        printf("Step: %d\n", SlidingBoard->TotalMoves);
-        PrintGameBoard(SlidingBoard);
-    }
-    else {
-        return 0;
+        printf("Step: %d\n", temp->TotalMoves);
+        PrintGameBoard(temp);
     }
     return 0;
 }

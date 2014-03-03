@@ -19,7 +19,7 @@ int main(int argc, const char * argv[])
         AStarSearch(&SlidingBoard_1);
     }
     Board SlidingBoard_2;
-    CreateRandomBoard(&SlidingBoard_2, 11);
+    CreateRandomBoard(&SlidingBoard_2, 10);
     if (CalculateInversions(&SlidingBoard_2)) {
         printf("\nGame Board:\n");
         PrintGameBoard(&SlidingBoard_2);
